@@ -46,8 +46,11 @@
 
         .chat-container {
             display: flex;
+            flex-direction: column;
             height: 100vh;
-            background: transparent;
+            max-height: 100vh;
+            overflow: hidden;
+            position: relative;
         }
 
         .chat-wrapper {
@@ -57,6 +60,7 @@
             background-color: rgba(42,30,63,0.8);
             backdrop-filter: blur(15px);
             box-shadow: 0 0 50px rgba(0,0,0,0.2);
+            flex-grow: 1;
             overflow: hidden;
         }
 
@@ -111,11 +115,46 @@
         .messages-container {
             flex-grow: 1;
             overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 100px; /* Space for input */
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+
+        .chat-input-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--color-bg-secondary);
             padding: 15px;
+            z-index: 1000;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: rgba(42,30,63,0.5);
+            align-items: center;
+            box-shadow: 0 -5px 10px rgba(0,0,0,0.1);
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            margin-right: 10px;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid var(--color-text-secondary);
+            background: var(--color-bg-primary);
+            color: var(--color-text-primary);
+        }
+
+        .send-button {
+            background: var(--color-accent-primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
         }
 
         .message {
@@ -165,96 +204,18 @@
             color: var(--color-text-primary);
         }
 
-        .chat-input-container {
-            display: flex;
-            padding: 15px 20px;
-            background-color: var(--color-bg-secondary);
-            border-top: 1px solid var(--color-bg-tertiary);
-        }
+        @media (max-width: 768px) {
+            .chat-container {
+                padding-bottom: 80px; /* Extra space for input on mobile */
+            }
 
-        .chat-input {
-            flex-grow: 1;
-            padding: 10px 15px;
-            background-color: var(--color-bg-primary);
-            color: var(--color-text-primary);
-            border: 1px solid var(--color-bg-tertiary);
-            border-radius: 8px;
-            outline: none;
-            font-size: var(--font-size-base);
-        }
+            .messages-container {
+                padding: 10px;
+            }
 
-        .send-button {
-            margin-left: 10px;
-            padding: 10px 15px;
-            background-color: var(--color-accent-primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            transform-origin: center;
-        }
-
-        .send-button:hover {
-            background-color: var(--color-accent-secondary);
-            transform: scale(1.05);
-        }
-
-        .send-button:active {
-            transform: scale(0.95);
-        }
-
-        #font-size-modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: var(--color-bg-secondary);
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-elegant);
-            z-index: 1000;
-            width: 300px;
-            text-align: center;
-        }
-
-        #font-size-modal h3 {
-            margin-bottom: 15px;
-            color: var(--color-text-primary);
-        }
-
-        #font-size-slider {
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        #font-size-modal button {
-            background-color: var(--color-accent-primary);
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin: 0 5px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        #font-size-modal button:hover {
-            background-color: var(--color-accent-secondary);
-        }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
+            .chat-input-container {
+                padding: 10px;
+            }
         }
     </style>
 </head>
@@ -288,21 +249,6 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="modal-overlay"></div>
-    <div id="font-size-modal">
-        <h3>Adjust Font Size</h3>
-        <input 
-            type="range" 
-            id="font-size-slider" 
-            min="12" 
-            max="24" 
-            value="14" 
-            step="1"
-        >
-        <button onclick="applyFontSize()">Apply</button>
-        <button onclick="closeFontSizeModal()">Cancel</button>
-    </div>
-
     <script>
         const chatInput = document.getElementById('chat-input');
         const sendButton = document.getElementById('send-button');
@@ -328,23 +274,42 @@
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
+        function scrollToBottom() {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Scroll to bottom when page loads
+        document.addEventListener('DOMContentLoaded', scrollToBottom);
+
+        // Scroll to bottom after sending a message
+        sendButton.addEventListener('click', () => {
+            setTimeout(scrollToBottom, 100);
+        });
+
+        // Scroll to bottom when new messages are added
+        const observer = new MutationObserver(scrollToBottom);
+        observer.observe(messagesContainer, { 
+            childList: true, 
+            subtree: true 
+        });
+
         function sendMessage() {
-            const message = chatInput.value.trim();
-            if (!message) return;
+            const messageText = chatInput.value.trim();
+            if (messageText) {
+                appendMessage(messageText, true);
+                chatInput.value = '';
+                scrollToBottom();
 
-            chatInput.value = '';
-            appendMessage(message, true);
-
-            fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ 
-                    messages: [
-                        { 
-                            role: "system", 
-                            content: `You are Izhan, a professional AI therapist. Follow these strict guidelines:
+                fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        messages: [
+                            { 
+                                role: "system", 
+                                content: `You are Izhan, a professional AI therapist. Follow these strict guidelines:
 
 *Objective*:
 - Provide *direct*, *concise*, and *actionable* mental health support
@@ -380,49 +345,48 @@
 - *Respond directly to the user's specific concern*
 - *Do not* describe your role or capabilities
 - *Provide immediate, practical support*`
-                        },
-                        { role: "user", content: message }
-                    ]
+                            },
+                            { role: "user", content: messageText }
+                        ]
+                    })
                 })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.response && data.response.content) {
-                    appendMessage(data.response.content, false);
-                } else {
-                    throw new Error('Invalid response format');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                appendMessage('*Support temporarily unavailable.* Please try again.', false);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.response && data.response.content) {
+                        appendMessage(data.response.content, false);
+                    } else {
+                        throw new Error('Invalid response format');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    appendMessage('*Support temporarily unavailable.* Please try again.', false);
+                });
+            }
         }
-
-        window.addEventListener('load', () => {
-            const initialMessages = [
-                "Hey there! 👋 I'm *Izhan*, your friendly AI therapist. Don't worry, I'm here to help - but I promise I won't psychoanalyze your childhood in the first five minutes! 😄",
-                "*What's on your mind today?* Whether it's big stuff or small stuff, I'm all ears (or, well, algorithms). Let's chat and work through whatever you're experiencing.",
-                "Pro tip: I'm like a therapist who's had *way* too much coffee - always ready to listen and help you find solutions! 🚀"
-            ];
-
-            initialMessages.forEach((msg, index) => {
-                setTimeout(() => {
-                    appendMessage(msg, false);
-                }, (index + 1) * 1000);
-            });
-        });
 
         sendButton.addEventListener('click', sendMessage);
         chatInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 sendMessage();
             }
+        });
+
+        const initialMessages = [
+            "Hey there! 👋 I'm *Izhan*, your friendly AI therapist. Don't worry, I'm here to help - but I promise I won't psychoanalyze your childhood in the first five minutes! 😄",
+            "*What's on your mind today?* Whether it's big stuff or small stuff, I'm all ears (or, well, algorithms). Let's chat and work through whatever you're experiencing.",
+            "Pro tip: I'm like a therapist who's had *way* too much coffee - always ready to listen and help you find solutions! 🚀"
+        ];
+
+        initialMessages.forEach((msg, index) => {
+            setTimeout(() => {
+                appendMessage(msg, false);
+            }, (index + 1) * 1000);
         });
     </script>
 </body>
