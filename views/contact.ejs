@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Mindfullness | Get in Touch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg-primary: #0C1B2E;
+            --color-bg-secondary: #1A3A5F;
+            --color-bg-tertiary: #2A1E3F;
+            --color-text-primary: #E2E8F0;
+            --color-text-secondary: #A0AEC0;
+            --color-accent-primary: #3B82F6;
+            --color-accent-secondary: #2563EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, 
+                rgba(12,27,46,1), 
+                rgba(42,30,63,1)
+            );
+            color: var(--color-text-primary);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            background: rgba(12,27,46,0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-logo {
+            color: var(--color-accent-primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .navbar-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-links a:hover {
+            color: var(--color-accent-primary);
+        }
+
+        .contact-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 50px 20px;
+        }
+
+        .contact-form {
+            background: rgba(42,30,63,0.5);
+            padding: 40px;
+            border-radius: 15px;
+        }
+
+        h1 {
+            background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--color-text-secondary);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(59,130,246,0.3);
+            border-radius: 8px;
+            background: rgba(12,27,46,0.5);
+            color: var(--color-text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--color-accent-primary);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--color-accent-primary), var(--color-accent-secondary));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-5px);
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-top: 30px;
+            color: var(--color-text-secondary);
+        }
+
+        .error-message {
+            background: #ff0000;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .contact-method {
+            margin-bottom: 20px;
+        }
+
+        .contact-method i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+
+        .contact-link {
+            text-decoration: none;
+            color: var(--color-text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: var(--color-accent-primary);
+        }
+
+        @media (max-width: 600px) {
+            .contact-form {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="/" class="navbar-logo">Mindfullness</a>
+        <div class="navbar-links">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            <a href="/chat">Chat</a>
+            <a href="/contact">Contact</a>
+        </div>
+    </nav>
+
+    <div class="contact-container">
+        <h1>Contact Mindfullness</h1>
+        
+        <% if (locals.error) { %>
+            <div class="error-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <%= error %>
+            </div>
+        <% } %>
+
+        <div class="contact-info">
+            <div class="contact-method">
+                <i class="fas fa-envelope"></i>
+                <h3>Email</h3>
+                <a href="mailto:mohammadizhan710@gmail.com" class="contact-link">
+                    mohammadizhan710@gmail.com
+                </a>
+            </div>
+            <div class="contact-method">
+                <i class="fab fa-linkedin"></i>
+                <h3>LinkedIn</h3>
+                <a href="https://www.linkedin.com/in/mohammadizhan" target="_blank" class="contact-link">
+                    Mohammad Izhan
+                </a>
+            </div>
+            <div class="contact-method">
+                <i class="fab fa-github"></i>
+                <h3>GitHub</h3>
+                <a href="https://github.com/mohammadizhan" target="_blank" class="contact-link">
+                    mohammadizhan
+                </a>
+            </div>
+        </div>
+
+        <form class="contact-form" action="/submit-contact" method="POST" disabled>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" disabled>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" disabled>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" disabled></textarea>
+            </div>
+            <button type="submit" class="submit-btn" disabled>
+                Send Message
+            </button>
+        </form>
+    </div>
+</body>
+</html>
