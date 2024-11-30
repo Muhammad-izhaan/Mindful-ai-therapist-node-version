@@ -1,0 +1,34 @@
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Optional 3D Hover Effects
+            document.addEventListener('mousemove', (e) => {
+                const heroSection = document.querySelector('.hero');
+                const heroImage = document.querySelector('.hero-image img');
+                
+                if (heroSection && heroImage) {
+                    const moveX = (e.clientX / window.innerWidth - 0.5) * 20;
+                    const moveY = (e.clientY / window.innerHeight - 0.5) * 20;
+                    
+                    heroImage.style.transform = `rotateX(${moveY}deg) rotateY(${-moveX}deg)`;
+                }
+            });
+
+            // Smooth scroll to sections
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ 
+                            behavior: 'smooth' 
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

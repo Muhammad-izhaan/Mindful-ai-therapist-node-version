@@ -216,3 +216,41 @@ body {
         transform: translateY(-5px);
     }
 }
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+    .chat-container {
+        flex-direction: row;
+        height: auto;
+    }
+
+    .chat-header {
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .logo-container {
+        margin-bottom: 1rem;
+    }
+
+    .messages-container {
+        padding: 1rem;
+    }
+
+    .chat-input-container {
+        padding: 1rem;
+    }
+
+    .chat-input {
+        padding: 0.5rem 1rem;
+    }
+
+    .send-button {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Hide mobile illustration on desktop */
+@media (min-width: 769px) {
+    /* No styles to hide mobile illustration on desktop */
+}
