@@ -6,6 +6,8 @@
     <title>Mindfullness | Professional Therapeutic Support</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <style>
         :root {
             --color-bg-primary: #0C1B2E;
@@ -33,15 +35,19 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, 
-                rgba(42,30,63,0.95), 
-                rgba(58,30,95,0.95)
-            );
-            background-attachment: fixed;
-            background-size: cover;
+            background: linear-gradient(-45deg, #0C1B2E, #2A1E3F, #1A3A5F, #2A1E3F);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: var(--color-text-primary);
             line-height: 1.6;
             font-size: var(--font-size-base);
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         .chat-container {
@@ -49,92 +55,162 @@
             flex-direction: column;
             height: 100vh;
             max-height: 100vh;
-            overflow: hidden;
-        }
-
-        .chat-wrapper {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            overflow: hidden;
-            position: relative;
         }
 
         .chat-header {
+            background: rgba(12, 27, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: linear-gradient(135deg, 
-                rgba(58,30,95,0.9), 
-                rgba(47,30,160,0.9)
-            );
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .logo-container {
             display: flex;
             align-items: center;
+            gap: 1rem;
         }
 
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--color-text-primary);
-            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
         }
 
-        .logo-subtitle {
-            font-size: 0.7rem;
-            color: var(--color-text-secondary);
-            margin-left: 10px;
-            background-color: rgba(15,32,65,0.5);
-            padding: 3px 8px;
+        .logo i {
+            color: var(--color-accent-primary);
+        }
+
+        .reset-button {
+            background: rgba(220, 38, 38, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            padding: 0.5rem 1rem;
             border-radius: 20px;
-        }
-
-        .settings-btn {
-            background: none;
-            border: none;
-            color: var(--color-text-primary);
-            font-size: 1.2rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .settings-btn:hover {
-            transform: rotate(90deg);
+        .reset-button:hover {
+            background: rgba(220, 38, 38, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .reset-button i {
+            font-size: 0.8rem;
         }
 
         .messages-container {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 20px;
-            padding-bottom: 100px; /* More space for input */
+            padding: 2rem;
+            padding-bottom: 120px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
             scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            max-width: 70%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            animation: messageAppear 0.3s ease-out;
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user-message {
+            align-self: flex-end;
+        }
+
+        .message.ai-message {
+            align-self: flex-start;
+        }
+
+        .message-bubble {
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            background: rgba(26, 58, 95, 0.3);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-elegant);
+            transition: all 0.3s ease;
+            white-space: pre-wrap;
+        }
+
+        .user-message .message-bubble {
+            background: var(--color-accent-primary);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .ai-message .message-bubble {
+            background: rgba(42, 30, 63, 0.3);
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            margin-top: 0.25rem;
+            opacity: 0.8;
         }
 
         .chat-input-container {
-            width: 100%;
-            padding: 15px;
-            background: var(--color-bg-secondary);
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+            background: rgba(12, 27, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
+            gap: 1rem;
             align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            margin-top: 20px;
         }
 
         .chat-input {
             flex-grow: 1;
-            margin-right: 10px;
-            padding: 12px;
+            background: rgba(26, 58, 95, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 25px;
-            border: 1px solid var(--color-text-secondary);
-            background: var(--color-bg-primary);
+            padding: 1rem 1.5rem;
             color: var(--color-text-primary);
-            font-size: 14px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            min-height: 50px;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--color-accent-primary);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
         }
 
         .send-button {
@@ -148,270 +224,374 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-        }
-
-        .message {
-            max-width: 70%;
-            padding: 10px 15px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            word-wrap: break-word;
-            background: linear-gradient(135deg, 
-                rgba(58,30,95,0.9), 
-                rgba(47,30,160,0.9)
-            );
-            color: white;
-        }
-
-        .message.user-message {
-            align-self: flex-end;
-            margin-left: auto;
-            background: linear-gradient(135deg, 
-                rgba(30,58,95,0.9), 
-                rgba(47,94,160,0.9)
-            );
-        }
-
-        .message.ai-message {
-            align-self: flex-start;
-            margin-right: auto;
-        }
-
-        .message-bubble {
-            padding: 12px;
-            border-radius: 12px;
-            max-width: 100%;
-            line-height: 1.6;
+            transition: all 0.3s ease;
             box-shadow: var(--shadow-elegant);
-            position: relative;
-            white-space: pre-wrap;
         }
 
-        .message.user-message .message-bubble {
-            background-color: var(--color-accent-primary);
-            color: white;
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
         }
 
-        .message.ai-message .message-bubble {
-            background-color: var(--color-bg-tertiary);
+        .send-button:active {
+            transform: translateY(0);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(26, 58, 95, 0.3);
+            border-radius: 15px;
+            width: fit-content;
+            margin-top: 0.5rem;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-text-secondary);
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: rgba(12, 27, 46, 0.95);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
             color: var(--color-text-primary);
         }
 
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: flex-end;
+        }
+
+        .modal-button {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .modal-button.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--color-text-primary);
+        }
+
+        .modal-button.confirm {
+            background: #ef4444;
+            color: white;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-1px);
+        }
+
         @media (max-width: 768px) {
-            .chat-container {
-                padding-bottom: 70px; /* Ensure space at bottom */
+            .chat-header {
+                padding: 1rem;
             }
 
             .messages-container {
-                padding: 10px;
-                padding-bottom: 120px; /* Ensure input visibility */
+                padding: 1rem;
+                padding-bottom: 140px;
+                margin-bottom: 30px;
+            }
+
+            .message {
+                max-width: 85%;
             }
 
             .chat-input-container {
-                padding: 10px;
+                padding: 1rem;
                 position: fixed;
                 bottom: 0;
                 left: 0;
                 right: 0;
-                z-index: 1000;
+                background: rgba(12, 27, 46, 0.98);
             }
 
             .chat-input {
-                height: 45px;
-                font-size: 14px;
+                padding: 0.8rem 1.2rem;
+                font-size: 16px;
             }
-
-            .send-button {
-                width: 45px;
-                height: 45px;
-            }
-        }
-
-        /* Minimal extra space at the end of chat */
-        .messages-container::after {
-            content: '';
-            display: block;
-            height: 20px;
-            width: 100%;
         }
     </style>
 </head>
 <body>
     <div class="chat-container">
-        <div class="chat-wrapper">
-            <header class="chat-header">
-                <div class="logo-container">
-                    <div class="logo">Mindfullness</div>
-                    <div class="logo-subtitle">by Izhan</div>
-                </div>
-                <button class="settings-btn" onclick="openFontSizeModal()">
-                    <i class="fas fa-cog"></i>
-                </button>
-            </header>
+        <header class="chat-header">
+            <div class="logo-container">
+                <a href="/" class="logo">
+                    <i class="fas fa-brain"></i>
+                    Mindfullness
+                </a>
+            </div>
+            <button class="reset-button" id="resetButton">
+                <i class="fas fa-trash"></i>
+                Reset Chat
+            </button>
+        </header>
 
-            <div class="messages-container" id="messages-container"></div>
+        <div class="messages-container" id="messages">
+            <!-- Messages will be dynamically added here -->
+        </div>
 
-            <div class="chat-input-container">
-                <input 
-                    type="text" 
-                    id="chat-input" 
-                    class="chat-input" 
-                    placeholder="Share your thoughts confidentially..."
-                    autocomplete="off"
-                >
-                <button id="send-button" class="send-button">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" id="userInput" placeholder="Type your message..." autocomplete="off">
+            <button class="send-button" id="sendButton">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="resetModal">
+        <div class="modal">
+            <div class="modal-title">Reset Chat</div>
+            <div>Are you sure you want to reset the chat? This will clear all messages.</div>
+            <div class="modal-buttons">
+                <button class="modal-button cancel" id="cancelReset">Cancel</button>
+                <button class="modal-button confirm" id="confirmReset">Reset</button>
             </div>
         </div>
     </div>
 
     <script>
-        const chatInput = document.getElementById('chat-input');
-        const sendButton = document.getElementById('send-button');
-        const messagesContainer = document.querySelector('.messages-container');
-
-        function appendMessage(content, isUser) {
-            const messageDiv = document.createElement('div');
-            messageDiv.classList.add('message', isUser ? 'user-message' : 'ai-message');
-
-            const bubbleDiv = document.createElement('div');
-            bubbleDiv.classList.add('message-bubble');
-            
-            const formattedContent = content
-                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                .replace(/\n/g, '<br>');
-
-            bubbleDiv.innerHTML = formattedContent;
-
-            messageDiv.appendChild(bubbleDiv);
-            messagesContainer.appendChild(messageDiv);
-            
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        function scrollToBottom() {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-
-        // Scroll to bottom when page loads
-        document.addEventListener('DOMContentLoaded', scrollToBottom);
-
-        // Scroll to bottom after sending a message
-        sendButton.addEventListener('click', () => {
-            setTimeout(scrollToBottom, 100);
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
         });
 
-        // Scroll to bottom when new messages are added
-        const observer = new MutationObserver(scrollToBottom);
-        observer.observe(messagesContainer, { 
-            childList: true, 
-            subtree: true 
-        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const messagesContainer = document.getElementById('messages');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const resetButton = document.getElementById('resetButton');
+            const resetModal = document.getElementById('resetModal');
+            const cancelReset = document.getElementById('cancelReset');
+            const confirmReset = document.getElementById('confirmReset');
 
-        function sendMessage() {
-            const messageText = chatInput.value.trim();
-            if (messageText) {
-                appendMessage(messageText, true);
-                chatInput.value = '';
-                scrollToBottom();
+            // Store conversation history and user info
+            let conversationHistory = JSON.parse(localStorage.getItem('chatHistory')) || [];
+            let userName = localStorage.getItem('userName') || '';
+            let isFirstMessage = true;
 
-                fetch('/api/chat', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        messages: [
-                            { 
-                                role: "system", 
-                                content: `You are Izhan, a professional AI therapist. Follow these strict guidelines:
+            // System configuration for the AI
+            const systemConfig = {
+                role: "system",
+                content: `You are Izhaan, a professional AI therapist and health consultant. Follow these guidelines:
 
-*Objective*:
-dont say i am izhan, or introduce yourself too much or every time. start conversation directly with the answer, not with your introduction. strictly!
-when user greets,greet back properly۔
-dont act too serious.
-if user instead of directly addressing its problem greets you, greet him back and ask its name.
-hey, hi, yo, hello, these greeting should have short responses.
-provide different solutions for every problem, 
-introduce yourself only once, that too in a very short sentence, for things you dont know or user greets again, greet aggresively back
-no reepeted greetings, strictly 
-- Provide *direct*, *concise*, and *actionable* mental health support
-- Focus on solving the user's specific problem
-- Deliver evidence-based, practical strategies
+- Keep responses concise unless detailed explanation is requested
+- Format important points with *italics* or **bold**
+- Use short paragraphs for better readability
+- Maintain professional yet friendly tone
+- Remember user's name and context
+- Ask clarifying questions when needed
+- Provide practical, actionable advice`
+            };
 
-*Communication Protocol*:
-1. *Immediate Assessment*
-   - Quickly identify the core issue
-   - Avoid lengthy introductions or role descriptions
+            function addMessage(content, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+                
+                const bubble = document.createElement('div');
+                bubble.className = 'message-bubble';
+                
+                // Format the message content
+                const formattedContent = content
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/\n/g, '<br>');
+                
+                bubble.innerHTML = formattedContent;
+                
+                const time = document.createElement('div');
+                time.className = 'message-time';
+                time.textContent = new Date().toLocaleTimeString();
+                
+                messageDiv.appendChild(bubble);
+                messageDiv.appendChild(time);
+                messagesContainer.appendChild(messageDiv);
+                
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                return messageDiv;
+            }
 
-2. *Solution Framework*
-   - Break down complex problems into *clear, manageable steps*
-   - Provide *specific, measurable* recommendations
-   - Use *actionable language*
+            function showTypingIndicator() {
+                const indicator = document.createElement('div');
+                indicator.className = 'typing-indicator';
+                for (let i = 0; i < 3; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'typing-dot';
+                    indicator.appendChild(dot);
+                }
+                messagesContainer.appendChild(indicator);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                return indicator;
+            }
 
-3. *Response Structure*
-   - Begin with a *brief, empathetic acknowledgment*
-   - Deliver *practical, step-by-step guidance*
-   - Conclude with *encouraging, motivational statement*
+            async function handleUserInput() {
+                const message = userInput.value.trim();
+                if (!message) return;
 
-4. *Therapeutic Techniques*
-   - Apply *cognitive-behavioral* approaches
-   - Use *reflective listening* principles
-   - Suggest *evidence-based coping mechanisms*
+                // Clear input
+                userInput.value = '';
 
-5. *Boundaries*
-   - Maintain *professional, compassionate* tone
-   - *Avoid* generic advice
-   - *Customize* responses to individual needs
+                // Add user message
+                addMessage(message, true);
 
-*Critical Instruction*:
-- *Respond directly to the user's specific concern*
-- *Do not* describe your role or capabilities
-- *Provide immediate, practical support*`
-                            },
-                            { role: "user", content: messageText }
-                        ]
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
+                // Check if this is the user's first message and it contains their name
+                if (isFirstMessage && !userName) {
+                    const nameMatch = message.match(/(?:I am|I'm|name is|call me) ([\w\s]+)/i);
+                    if (nameMatch) {
+                        userName = nameMatch[1].trim();
+                        localStorage.setItem('userName', userName);
                     }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.response && data.response.content) {
-                        appendMessage(data.response.content, false);
+                }
+                isFirstMessage = false;
+
+                // Add to conversation history
+                conversationHistory.push({ role: "user", content: message });
+
+                // Show typing indicator
+                const typingIndicator = showTypingIndicator();
+
+                try {
+                    const response = await fetch('/api/chat', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            messages: [
+                                systemConfig,
+                                ...(userName ? [{ role: "system", content: `The user's name is ${userName}.` }] : []),
+                                ...conversationHistory
+                            ]
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    // Remove typing indicator
+                    typingIndicator.remove();
+
+                    if (data.error) {
+                        addMessage("I apologize, but I'm having trouble responding right now. Please try again.");
                     } else {
-                        throw new Error('Invalid response format');
+                        const aiResponse = data.response.content;
+                        addMessage(aiResponse);
+                        conversationHistory.push({ role: "assistant", content: aiResponse });
+                        
+                        // Save conversation history to localStorage
+                        localStorage.setItem('chatHistory', JSON.stringify(conversationHistory));
                     }
-                })
-                .catch(error => {
+                } catch (error) {
+                    typingIndicator.remove();
+                    addMessage("I apologize, but I'm having trouble connecting right now. Please check your internet connection and try again.");
                     console.error('Error:', error);
-                    appendMessage('*Support temporarily unavailable.* Please try again.', false);
+                }
+            }
+
+            // Show/hide modal functions
+            function showResetModal() {
+                resetModal.style.display = 'flex';
+            }
+
+            function hideResetModal() {
+                resetModal.style.display = 'none';
+            }
+
+            // Reset chat function
+            function resetChat() {
+                localStorage.removeItem('chatHistory');
+                localStorage.removeItem('userName');
+                conversationHistory = [];
+                userName = '';
+                isFirstMessage = true;
+                messagesContainer.innerHTML = '';
+                hideResetModal();
+                
+                // Show initial message again
+                setTimeout(() => {
+                    const welcomeMessage = "Hello! I'm Izhaan, your AI therapist and health consultant. I'm here to provide professional support and guidance for your mental health and wellness journey. Would you mind sharing your name with me?";
+                    addMessage(welcomeMessage);
+                    conversationHistory.push({ role: "assistant", content: welcomeMessage });
+                    localStorage.setItem('chatHistory', JSON.stringify(conversationHistory));
+                }, 500);
+            }
+
+            // Event listeners
+            sendButton.addEventListener('click', handleUserInput);
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleUserInput();
+            });
+
+            // Event listeners for modal
+            resetButton.addEventListener('click', showResetModal);
+            cancelReset.addEventListener('click', hideResetModal);
+            confirmReset.addEventListener('click', resetChat);
+
+            // Close modal when clicking outside
+            resetModal.addEventListener('click', (e) => {
+                if (e.target === resetModal) {
+                    hideResetModal();
+                }
+            });
+
+            // Load previous messages if they exist
+            if (conversationHistory.length > 0) {
+                conversationHistory.forEach(msg => {
+                    addMessage(msg.content, msg.role === "user");
                 });
+            } else {
+                // Welcome message
+                setTimeout(() => {
+                    const welcomeMessage = "Hello! I'm Izhaan, your AI therapist and health consultant. I'm here to provide professional support and guidance for your mental health and wellness journey. Would you mind sharing your name with me?";
+                    addMessage(welcomeMessage);
+                    conversationHistory.push({ role: "assistant", content: welcomeMessage });
+                    localStorage.setItem('chatHistory', JSON.stringify(conversationHistory));
+                }, 1000);
             }
-        }
-
-        sendButton.addEventListener('click', sendMessage);
-        chatInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
-
-        const initialMessages = [
-            "Hey there! I'm *Izhan*, your friendly AI therapist. Don't worry, I'm here to help - but I promise I won't psychoanalyze your childhood in the first five minutes!",
-            "*What's on your mind today?* Whether it's big stuff or small stuff, I'm all ears (or, well, algorithms). Let's chat and work through whatever you're experiencing.",
-            "Pro tip: Don't greet me, i am not yet trained for friendly convo's. Describe the problems your are facing straightway. I'm like a therapist who's had *way* too much coffee - always ready to listen and help you find solutions!"
-        ];
-
-        initialMessages.forEach((msg, index) => {
-            setTimeout(() => {
-                appendMessage(msg, false);
-            }, (index + 1) * 1000);
         });
     </script>
 </body>
