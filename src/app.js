@@ -19,7 +19,7 @@ app.set('views', path.join(__dirname, '../views'));
 
 // Initialize Groq
 const groq = new Groq({
-    apiKey: process.env.GROQ_API_KEY || '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'
+    apiKey: process.env.GROQ_API_KEY || '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'
 });
 
 // Routes
